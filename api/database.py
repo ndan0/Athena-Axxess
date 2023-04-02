@@ -6,8 +6,6 @@ import random
 start_date = datetime.datetime(2023, 1, 1)
 dates = [start_date + datetime.timedelta(days=i) for i in range(51)]
 
-cred = credentials.Certificate("./secret.json")
-firebase_admin.initialize_app(cred)
 
 db = firestore.client()  # this connects to our Firestore database
 collection = db.collection('query-db')  # opens 'query-db' collection
@@ -69,7 +67,7 @@ id = 0
 for i in range(0, len(dates)):
     print(i)
     res = collection.document(str(id)).set({
-        "Date": dates[i],
+        "Date": datetime.datetime.strftime(dates[i], '%Y-%m-%d'),
         "Keywords": "",
         "Query": queries[i],
         "Sentiment": [0,0,0,0],

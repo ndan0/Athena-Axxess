@@ -57,9 +57,13 @@ class HeartRate(BaseModel):
     date: str
     avg_hrt: float
 
+class Calories(BaseModel):
+    date: str
+    calories: int
+
 class Keywords(BaseModel):
     date: str
-    kws: str
+    keywords: str
 
 class Emotions(BaseModel):
     date: str

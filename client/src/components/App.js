@@ -6,6 +6,8 @@ import Image from 'next/image';
 import SendIcon from '@/components/SendIcon'
 import MicIcon from '@/components/Microphone'
 import { useReactMediaRecorder } from "react-media-recorder";
+import { Player } from '@lottiefiles/react-lottie-player';
+
 
 
 export default function App() {
@@ -83,7 +85,14 @@ useEffect(() => {
 
   };
 
-
+useEffect(() => {
+    if (chat.length > 0 && chat[chat.length - 1].role == "assistant") {
+        const action = async () => {
+            await fetch("http://localhost:8000/tts?text="+encodeURIComponent(chat[chat.length - 1].content))
+        }
+        action()
+    }
+}, [chat])
 
   return (
     <div className={styles.container}>
@@ -95,7 +104,7 @@ useEffect(() => {
       </Head>
 
       
-        <div className={styles.mainWrapper}>
+        <div className={styles.mainWrapper + " " + "h-screen overflow-scroll"}>
         <div className={styles.menu}>
           <button className={styles.newBtn}><span className="material-symbols-outlined">add</span> New Subject</button>
         {classes.map((course, index) => (
@@ -107,11 +116,22 @@ useEffect(() => {
         </div>
       <div className={styles.ChatBox}>
       {
-        chat.length == 0 ? 
+        chat.length == 0 &&
+        <>
       <div className={styles.titleContainer}>
-      <span className="material-symbols-outlined">neurology</span>
-        <p className={styles.title}>TutorAI</p>
-      </div> : ""
+      <span class="material-symbols-outlined">health_and_safety</span>
+        <p className={styles.title}>Athena</p>
+        
+      </div>
+      <Player
+  autoplay
+  loop
+  src="https://assets9.lottiefiles.com/packages/lf20_dvwwzmah.json"
+  style={{ height: '300px', width: '300px' }}
+>
+
+</Player>
+        </>
         }
         {chat.map((message, index) => {
             console.log(message)
