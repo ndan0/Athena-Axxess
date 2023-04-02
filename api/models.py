@@ -4,11 +4,11 @@ from pydantic import BaseModel
 
 
 class Sender(Enum):
-    USER = 1
-    PERSONA = 2
+    USER = "user"
+    ASSISTANT = "assistant"
     
 class Message(BaseModel):
-    id: str
+    id: int
     text: str
     sender: Sender
     timestamp: str
@@ -27,26 +27,29 @@ class Persona(BaseModel):
     professional_description: str
         A description of the persona for health professionals. This is used to help health professionals choose the right persona for their patients.
     """
-    id: str
+    id: int
     name: str
     prompt: str
     professional_description: str
 
 class Conversation(BaseModel):
-    id: str
-    user_id: str
-    persona: Persona
+    id: int
+    user_id: int
     messages: list[Message]
 
 
 class User(BaseModel):
-    id: str
+    id: int
     name: str
     health_history: str
     conversations: list[Conversation]
     persona: Persona
 
 class HealthProfessional(BaseModel):
-    id: str
+    id: int
     name: str
     patients: list[User]
+
+
+class TextCompletionBody(BaseModel):
+    message: str

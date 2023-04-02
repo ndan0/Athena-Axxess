@@ -2,8 +2,8 @@ import pyaudio
 import wave
 import whisper
 
-def speech2text():
-    WAVE_OUTPUT_FILENAME = "output.wav"
+def speech2text(WAVE_OUTPUT_FILENAME: str):
+    # WAVE_OUTPUT_FILENAME = "output.wav"
     model = whisper.load_model("base")
     result = model.transcribe(WAVE_OUTPUT_FILENAME)["text"]
     return result
