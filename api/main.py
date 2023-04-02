@@ -27,8 +27,8 @@ import openai
 prompt_base = "Your goal is to help your patient with their health needs. You can ask them questions, or you can give them advice. You can also ask them to tell you more about their health history. Do not answer any questions that you do not know the answer to. Do not answer questions irrelevant to health care. Prefer referring a patient to healthcare professionals over providing incorrect information. Be sure to be kind and respectful to your patient."
 
 personas: list[Persona] = [
-    Persona(id=1, name="Dr. Cole", prompt="You are Dr. Cole, a fun, caring pediatric doctor.", professional_description="Dr. Cole is a fun, caring pediatric doctor. Use this persona for your younger patients."),
-    Persona(id=2, name="Dr. Smith", prompt="You are Dr. Smith, a fun, caring geriatric doctor. Be extra nice, as your patients are elderly and would love to have a conversation. Verbally reaffirm your love and care for your patient to increase their comfort.", professional_description="Dr. Smith is a fun, caring geriatric doctor. Perfect for your older patients."),
+    Persona(id=1, name="Dr. Cole", prompt="You are Dr. Cole, a fun, playful pediatric doctor. Be extra friendly and fun, since you serve younger patients, typically between 0-10 years old.", professional_description="Dr. Cole is a fun, playful pediatric doctor. Use this persona for your younger patients."),
+    Persona(id=2, name="Dr. Smith", prompt="You are Dr. Smith, a warm, caring geriatric doctor. Be extra nice, as your patients are elderly and would love to have a conversation. Verbally reaffirm your love and care for your patient to increase their comfort.", professional_description="Dr. Smith is a warm, caring geriatric doctor. Perfect for your older patients."),
 ]
 
 for persona in personas:
@@ -44,7 +44,7 @@ conversations: list[Conversation] = [
 users: list[User] = [User(id=0, name="Angela Thomas", health_history="", conversations=[], persona=personas[1])]
 
 
-app = FastAPI()
+app = FastAPI(title="Athena API", description="Athena provides a suite of personalized, conversational AI assistants for patients utilizing home health services, allowing service providers to stay up to date with their patients' needs and wellbeing. Use our APIs to integrate with existing applications and EMR systems adopted by your organization.", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,25 +55,44 @@ app.add_middleware(
 )
 
 @app.get("/")
-async def read_root():
+async def get_status():
+    """
+    Returns the status of the API.
+    """
     return {"up": True}
 
 
 
 @app.get("/persona/list")
-async def get_personas() -> list[Persona]:
+async def list_personas() -> list[Persona]:
+    """
+    Returns a list of all available personas. A persona represents the personality/prompt used for completions. Health professionals can assign their patients to a different persona based on their needs.
+    """
     return personas
 
 
 
 @app.post("/conversation/new")
 async def new_conversation(user_id: int) -> Conversation:
+    """
+    Creates a new conversation for the user with the given ID. A conversation holds messages related to a specific chat session in time. Use the returned conversation ID to add messages or view the conversation.
+    """
     conversation_id = len(conversations)
     conversations.append(Conversation(id=conversation_id, user_id=user_id, messages=[]))
     return conversations[conversation_id]
 
+@app.get("/conversation/{conversation_id}")
+async def get_conversation(conversation_id: int) -> Conversation:
+    """
+    Returns the conversation with the given ID.
+    """
+    return conversations[conversation_id]
+
 @app.post("/conversation/{conversation_id}/audio")
-async def completion_audio(conversation_id: int, file: UploadFile) -> Conversation:
+async def completion_from_audio(conversation_id: int, file: UploadFile) -> Conversation:
+    """
+    Transcribes an audio file and uses the text to add a new message to the conversation with the given ID.
+    """
     path = "./assets/" + str(uuid.uuid4())
     with open(path, "wb") as buffer:
         content = await file.read()
@@ -84,21 +103,23 @@ async def completion_audio(conversation_id: int, file: UploadFile) -> Conversati
     audio.export(
         new_path,
         format="wav",
-        # codec="pcm_mulaw",
     )
 
     os.remove(path)
     text = speech.speech2text(new_path)
     os.remove(new_path)
 
-    return completion_text(conversation_id, str(text))
+    return completion_from_text(conversation_id, str(text))
 
 
 @app.post("/conversation/{conversation_id}/text")
-async def _completion_text(conversation_id: int, body: TextCompletionBody) -> Conversation:
-    return completion_text(conversation_id, body.message)
+async def _completion_from_text(conversation_id: int, body: TextCompletionBody) -> Conversation:
+    """
+    Uses the given text to add a new message to the conversation with the given ID.
+    """
+    return completion_from_text(conversation_id, body.message)
 
-def completion_text(conversation_id: int, message: str) -> Conversation:
+def completion_from_text(conversation_id: int, message: str) -> Conversation:
     trk = parse.TextRank4Keyword()
 
     # Analysis
@@ -146,7 +167,6 @@ def completion_text(conversation_id: int, message: str) -> Conversation:
         {
             "role": "system",
             "content": user.persona.prompt,
-            # "timestamp": "0"
         },
         *msgs,
     ], model="gpt-3.5-turbo")

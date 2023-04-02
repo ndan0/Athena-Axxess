@@ -14,7 +14,7 @@ export default function App() {
         [
 
 
-        'Marketing Research',
+        "My Health"
 
     ]
     const [selectedClass, setSelectedClass] = useState(0)
@@ -39,18 +39,7 @@ export default function App() {
 
     useEffect(() => {console.log({status, mediaBlobUrl, previewAudioStream, previewStream})}, [status]);
 
-    useEffect(() => {
-      setChat([{
-        "content": `You are a college professor teaching ${classes[selectedClass]}. When a student brings you a question, you will be provided with a excerpt from your lecture and a textbook passage related to the question to help you answer their query with context.`,
-        "role": "system"
-    }])
-    },[selectedClass])
-  const [chat, setChat] = useState([
-    {
-        "content": `You are a college professor teaching ${classes[selectedClass]}. When a student brings you a question, you will be provided with a excerpt from your lecture and a textbook passage related to the question to help you answer their query with context.`,
-        "role": "system"
-    }
-])
+  const [chat, setChat] = useState([])
 
 useEffect(() => {
   ref.current && ref.current.scrollIntoView({alignToTop: true, behavior: "smooth"})
@@ -118,13 +107,13 @@ useEffect(() => {
         </div>
       <div className={styles.ChatBox}>
       {
-        chat.filter((msg)=>msg.role.toLowerCase() !== "system").length == 0 ? 
+        chat.length == 0 ? 
       <div className={styles.titleContainer}>
       <span className="material-symbols-outlined">neurology</span>
         <p className={styles.title}>TutorAI</p>
       </div> : ""
         }
-        {chat.filter((msg)=>msg.role.toLowerCase() !== "system").map((message, index) => {
+        {chat.map((message, index) => {
             console.log(message)
             return(
 
