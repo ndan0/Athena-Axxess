@@ -11,18 +11,22 @@ const NavBar = () => {
 }
 export default function Navbar() {
     return (
+    <>
 
         <div className="flex flex-row justify-between items-center bg-white p-4">
-            <div className="flex flex-row items-center">
-                <Image src={logo} height={50} />
+            <div className="flex flex-row items-center h-0.5">
+                <Image href="/" src={logo} height={30} />
+
 
             </div>
             <div className="flex flex-row items-center">
-                <div href="/" ><a className="text-xl font-bold text-axx-red">Home</a></div>
-                <div href="/login"><a className="text-xl font-bold">Login</a></div>
-                <div href="/register"><a className="text-xl font-bold">Register</a></div>
+                <a href="/" className="text-xl font-bold text-axx-red px-4">Home</a>
+                <a href="/login" className="text-xl font-bold px-4">Login</a>
+                <a href="/register" className="text-xl font-bold px-4">Register</a>
             </div>
         </div>
+
+    </>
 
     )
 }

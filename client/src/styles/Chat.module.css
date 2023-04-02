@@ -3,7 +3,7 @@
 .container {
 
     display: flex;
-    height: 100vh;
+    /*height: 100vh;*/
     flex-direction: column;
     background-color: #fefae0;
     font-family: 'Inter', sans-serif;
