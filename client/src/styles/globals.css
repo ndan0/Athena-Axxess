@@ -44,7 +44,7 @@
   --card-border-rgb: 131, 134, 135;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
@@ -108,11 +108,7 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
+
 
 @keyframes spin {
   from {
@@ -128,4 +124,8 @@ a {
   width:min-content;
   height:min-content;
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 

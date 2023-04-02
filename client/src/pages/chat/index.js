@@ -4,18 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Image from 'next/image';
 import SendIcon from '@/components/SendIcon'
+import MicIcon from '@/components/Microphone'
 
 
 export default function Chat() {
 
     const classes =
         [
-            'Introduction to Psychology',
-            'Introduction to Management',
-            'Organizational Behavior',
-            'Human Resource Management',
 
-        'Introduction to Accounting',
 
         'Marketing Research',
 
@@ -177,6 +173,12 @@ useEffect(() => {
           >
             <SendIcon height={25} width={25}></SendIcon>
           </button>
+            <button
+
+                className={styles.enterButton}
+            >
+                <MicIcon height={25} width={25}></MicIcon>
+            </button>
           </div>
         </form>
       <div className={styles.fade}></div>
