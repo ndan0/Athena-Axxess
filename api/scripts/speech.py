@@ -1,5 +1,3 @@
-import pyaudio
-import wave
 import whisper
 
 def speech2text(WAVE_OUTPUT_FILENAME: str):
@@ -20,5 +18,3 @@ def speech2text(WAVE_OUTPUT_FILENAME: str):
     # # Convert text to speech
     # engine.say(result)
     # engine.runAndWait()
-
-

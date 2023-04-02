@@ -3,15 +3,14 @@ from enum import Enum
 from pydantic import BaseModel
 
 
-class Sender(Enum):
+class Sender(str, Enum):
     USER = "user"
     ASSISTANT = "assistant"
     
 class Message(BaseModel):
-    id: int
-    text: str
-    sender: Sender
-    timestamp: str
+    content: str
+    role: Sender
+    # timestamp: str
 
 class Persona(BaseModel):
     """

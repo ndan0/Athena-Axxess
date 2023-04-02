@@ -78,6 +78,15 @@
     z-index: 999;
 
 }
+.micButton {
+    background-color: #fefae0 !important;
+    border: none;
+    position: absolute;
+    right: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 999;
+}
 
 
 

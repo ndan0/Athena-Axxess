@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.stem import PorterStemmer
 from nltk.util import ngrams
-from SentimentAnalysis import model_load
+from .SentimentAnalysis import model_load
 
 
 nltk.download('stopwords')
