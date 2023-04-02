@@ -83,7 +83,14 @@ useEffect(() => {
 
   };
 
-
+useEffect(() => {
+    if (chat.length > 0 && chat[chat.length - 1].role == "assistant") {
+        const action = async () => {
+            await fetch("http://localhost:8000/tts?text="+encodeURIComponent(chat[chat.length - 1].content))
+        }
+        action()
+    }
+}, [chat])
 
   return (
     <div className={styles.container}>
@@ -95,7 +102,7 @@ useEffect(() => {
       </Head>
 
       
-        <div className={styles.mainWrapper}>
+        <div className={styles.mainWrapper + " " + "overflow-scroll"}>
         <div className={styles.menu}>
           <button className={styles.newBtn}><span className="material-symbols-outlined">add</span> New Subject</button>
         {classes.map((course, index) => (
@@ -109,8 +116,8 @@ useEffect(() => {
       {
         chat.length == 0 ? 
       <div className={styles.titleContainer}>
-      <span className="material-symbols-outlined">neurology</span>
-        <p className={styles.title}>TutorAI</p>
+      <span class="material-symbols-outlined">health_and_safety</span>
+        <p className={styles.title}>Athena</p>
       </div> : ""
         }
         {chat.map((message, index) => {

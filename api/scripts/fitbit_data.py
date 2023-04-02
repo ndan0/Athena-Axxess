@@ -8,8 +8,8 @@ import datetime
 client = fitbit.Fitbit(
     os.getenv("CLIENT_ID"), 
     os.getenv("CLIENT_SECRET"),
-    access_token='eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyM1FRWlEiLCJzdWIiOiI3N0JDOUQiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd3BybyB3bnV0IHdzbGUgd3dlaSB3c29jIHdhY3Qgd3NldCB3bG9jIiwiZXhwIjoxNjgwNDUzNjkzLCJpYXQiOjE2ODA0MjQ4OTN9.QaG3YJj-Y9gHxCDpTTW7EDV_43gOPS9PyhF1UemqmY0', 
-    refresh_token='e27dbea10de1566b60263e323b8f4ced1942069b50aac5083f529f5170d2de5e'
+    access_token=os.getenv("FITBIT_ACCESS_KEY"), 
+    refresh_token=os.getenv("FITBIT_REFRESH_TOKEN"),
 )
 
 def get_heart_rate(start_date, num_of_day):
@@ -31,6 +31,7 @@ def get_heart_rate(start_date, num_of_day):
             "date": date.strftime('%Y-%m-%d'),
             "avg_hrt": avg_hr
         }
+        print(obj)
         avg_heart.append(obj)
 
     print(avg_heart)
