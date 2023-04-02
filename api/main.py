@@ -1,16 +1,17 @@
 import os
 import uuid
 
-from models import Message, Persona, Conversation, User, TextCompletionBody, HeartRate, Keywords, Emotions
-from scripts import speech, parse, fitbit_data, dashboard
 import firebase_admin
 from firebase_admin import credentials, firestore
+cred = credentials.Certificate("./secret.json")
+firebase_admin.initialize_app(cred)
+
+from models import Message, Persona, Conversation, User, TextCompletionBody, HeartRate, Keywords, Emotions
+from scripts import speech, parse, fitbit_data, dashboard
 import datetime
 from pydub import AudioSegment
 
 
-cred = credentials.Certificate("./secret.json")
-firebase_admin.initialize_app(cred)
 
 db = firestore.client()  # this connects to our Firestore database
 collection = db.collection('query-db')  # opens 'query-db' collection
@@ -67,11 +68,11 @@ async def get_heart_rate(start_date: str, span: int) -> list[HeartRate]:
 
 @app.get("/dashboard/emotion/{start_date}/{span}")
 async def get_emotion(start_date: str, span: int) -> list[Emotions]:
-    return dashboard.get_emotion(start_date=start_date, num_of_day=span)
+    return dashboard.get_emotion(start_dt=start_date, num_of_days=span)
 
 @app.get("/dashboard/keywords/{start_date}/{span}")
 async def get_kws(start_date: str, span: int) -> list[Keywords]:
-    return dashboard.get_keywords(start_date=start_date, num_of_day=span)
+    return dashboard.get_keywords(start_dt=start_date, num_of_days=span)
 
 @app.get("/persona/list")
 async def list_personas() -> list[Persona]:

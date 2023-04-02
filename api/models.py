@@ -59,7 +59,7 @@ class HeartRate(BaseModel):
 
 class Keywords(BaseModel):
     date: str
-    kws: str
+    keywords: str
 
 class Emotions(BaseModel):
     date: str
