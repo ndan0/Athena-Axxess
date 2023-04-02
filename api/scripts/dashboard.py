@@ -2,8 +2,8 @@ import firebase_admin
 from datetime import datetime
 from firebase_admin import credentials, firestore
 
-cred = credentials.Certificate("./secret.json")
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate("./secret.json")
+# firebase_admin.initialize_app(cred)
 
 db = firestore.client()  # this connects to our Firestore database
 collection = db.collection('query-db')  # opens 'query-db' collection

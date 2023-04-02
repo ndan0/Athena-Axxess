@@ -69,7 +69,7 @@ id = 0
 for i in range(0, len(dates)):
     print(i)
     res = collection.document(str(id)).set({
-        "Date": dates[i],
+        "Date": datetime.datetime.strftime(dates[i], '%Y-%m-%d'),
         "Keywords": "",
         "Query": queries[i],
         "Sentiment": [0,0,0,0],
