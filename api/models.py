@@ -53,3 +53,15 @@ class HealthProfessional(BaseModel):
 
 class TextCompletionBody(BaseModel):
     message: str
+
+class HeartRate(BaseModel):
+    date: str
+    avg_hrt: float
+
+class Keywords(BaseModel):
+    date: str
+    kws: str
+
+class Emotions(BaseModel):
+    date: str
+    emotions: list[str]

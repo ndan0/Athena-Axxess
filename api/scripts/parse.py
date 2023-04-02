@@ -361,22 +361,23 @@ class TextRank4Keyword():
 
         return list(kp_node_weight.keys())[:15]
     
-# if __name__ == '__main__':
+if __name__ == '__main__':
     
-#     # Load in the extractor
-#     trk = TextRank4Keyword()
+    # Load in the extractor
+    trk = TextRank4Keyword()
     
-#     # Load in the user input
-#     print("Input your corpus:\n")
-#     txt = input()
+    # Load in the user input
+    print("Input your corpus:\n")
+    txt = input()
     
-#     # Analysis
-#     trk.analyze(txt)
-#     kw = trk.get_keywords()
-#     kw = '|'.join(kw)
-#     print(kw)
+    # Analysis
+    trk.analyze(txt)
+    kw = trk.get_keywords()
+    kw = '|'.join(kw)
+    print(kw)
     
-#     # Sentiment model load in
-#     model = model_load()
-#     sentiment = model(txt)
-#     print(sentiment[0])
+    # Sentiment model load in
+    model = model_load()
+    sentiment = model(txt)
+    print(sentiment[0])
+    print(sentiment)

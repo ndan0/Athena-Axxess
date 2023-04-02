@@ -1,7 +1,7 @@
 import uuid
 
-from models import Persona, Conversation, User, TextCompletionBody
-from .scripts import speech2text, parse
+from models import Persona, Conversation, User, TextCompletionBody, HeartRate, Keywords, Emotions
+from .scripts import speech2text, parse, fitbit_data, dashboard
 import firebase_admin
 from firebase_admin import credentials, firestore
 import datetime
@@ -41,7 +41,17 @@ app = FastAPI()
 async def read_root():
     return {"up": True}
 
+@app.get("/dashboard/heart/{start_date}/{span}")
+async def get_heart_rate(start_date: str, span: int) -> list[HeartRate]:
+    return fitbit_data.get_heart_rate(start_date=start_date, num_of_day=span)
 
+@app.get("/dashboard/emotion/{start_date}/{span}")
+async def get_emotion(start_date: str, span: int) -> list[Emotions]:
+    return dashboard.get_emotion(start_date=start_date, num_of_day=span)
+
+@app.get("/dashboard/keywords/{start_date}/{span}")
+async def get_kws(start_date: str, span: int) -> list[Keywords]:
+    return dashboard.get_keywords(start_date=start_date, num_of_day=span)
 
 @app.get("/persona/list")
 async def get_personas() -> list[Persona]:
