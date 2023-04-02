@@ -1,7 +1,16 @@
 import uuid
 
 from models import Persona, Conversation, User, TextCompletionBody
-from scripts import speech2text
+from .scripts import speech2text, parse
+import firebase_admin
+from firebase_admin import credentials, firestore
+import datetime
+
+cred = credentials.Certificate("./api/secret.json")
+firebase_admin.initialize_app(cred)
+
+db = firestore.client()  # this connects to our Firestore database
+collection = db.collection('query-db')  # opens 'query-db' collection
 
 from dotenv import load_dotenv
 
@@ -54,6 +63,30 @@ async def _completion_text(conversation_id: int, body: TextCompletionBody) -> Co
     return completion_text(conversation_id, body.message)
 
 def completion_text(conversation_id: int, message: str) -> Conversation:
+    trk = parse.TextRank4Keyword()
+
+    # Analysis
+    trk.analyze(message)
+    kw = trk.get_keywords()
+    kw = '|'.join(kw)
+    
+    # Sentiment model load in
+    model = parse.model_load()
+    sentiment = model(message)
+
+    # Query the latest document and retrieve its ID
+    query = collection.order_by('Date', direction=firestore.Query.DESCENDING).limit(1)
+    latest_doc = query[0]
+    latest_doc_id = latest_doc.id
+
+    res = collection.document(latest_doc_id).set({
+        "Date": datetime.datetime.now(),
+        "Keywords": kw,
+        "Query": message,
+        "Sentiment": sentiment,
+        "Risk": 0
+    })
+
     if conversation_id not in conversations:
         conversation_id = len(conversations)
         conversations.append(Conversation(id=conversation_id, user_id=0, messages=[]))
