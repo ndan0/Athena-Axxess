@@ -36,5 +36,25 @@ def get_heart_rate(start_date, num_of_day):
     print(avg_heart)
     return avg_heart
 
+def get_calories(start_date, num_of_day):
+    # Set the start date and end date for the heart rate data
+    start = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+
+    # avg_hr = []
+    avg_heart = []
+
+    for i in range(num_of_day):
+        date = start + datetime.timedelta(days=i)
+        date_str = date.strftime('%Y-%m-%d')
+        calories = client.activities(date=date_str)['summary']['caloriesOut']
+        obj = {
+            "date": date.strftime('%Y-%m-%d'),
+            "calories": calories
+        }
+        avg_heart.append(obj)
+
+    print(avg_heart)
+    return avg_heart
+
 
 # get_heart_rate('2023-01-01', 7)

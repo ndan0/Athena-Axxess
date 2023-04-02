@@ -66,6 +66,10 @@ async def get_status():
 async def get_heart_rate(start_date: str, span: int) -> list[HeartRate]:
     return fitbit_data.get_heart_rate(start_date=start_date, num_of_day=span)
 
+@app.get("/dashboard/calories/{start_date}/{span}")
+async def get_calories(start_date: str, span: int) -> list[HeartRate]:
+    return fitbit_data.get_calories(start_date=start_date, num_of_day=span)
+
 @app.get("/dashboard/emotion/{start_date}/{span}")
 async def get_emotion(start_date: str, span: int) -> list[Emotions]:
     return dashboard.get_emotion(start_dt=start_date, num_of_days=span)
