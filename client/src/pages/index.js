@@ -16,7 +16,7 @@ export default function Login() {
             <div className="flex flex-col items-start justify-center min-h-screen py-2 -mt-28 px-14 text-center">
                 <div className="block max-w-md p-6 rounded-xl bg-gray-200 bg-opacity-60">
                     <h1 className="text-4xl mb-6 font-bold text-black">Introducing Athena</h1>
-                    <h3 className="text-2xl font-bold text-black">A powerful, user-friendly virtual assistant for home health, home care, hospice, and palliative care </h3>
+                    <h3 className="text-2xl font-bold text-black">A powerful, user-friendly virtual assistant for heath care at home</h3>
                     <a href="/login"
                        className="mt-8 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-axx-red focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-axx-red  dark:focus:bg-axx-red">
                         Explore

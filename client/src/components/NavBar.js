@@ -20,9 +20,9 @@ export default function Navbar() {
 
             </div>
             <div className="flex flex-row items-center">
-                <a href="/" className="text-xl font-bold text-axx-red px-4">Home</a>
-                <a href="/login" className="text-xl font-bold px-4">Login</a>
-                <a href="/register" className="text-xl font-bold px-4">Register</a>
+                <a href="/" className="text-xl font-extrabold text-axx-red px-4">Home</a>
+                <a href="/login" className="text-xl font-extrabold px-4">Login</a>
+                <a href="https://www.axxess.com/contact/" className="text-xl font-extrabold px-4">Contact us</a>
             </div>
         </div>
 
