@@ -24,6 +24,7 @@ export default function App() {
     useReactMediaRecorder({ video: false, audio: true, mediaRecorderOptions: {
         mimeType: 'audio/webm'
     }, onStop: async (_, blob)=>{
+        setLoading(true)
         console.log({blob})
         const body = new FormData();
         body.append("file", blob);
@@ -33,6 +34,7 @@ export default function App() {
         const result = await res.json();
         console.log({result})
         setChat(result.messages)
+        setLoading(false)
     } });
 
     useEffect(() => {console.log({status, mediaBlobUrl, previewAudioStream, previewStream})}, [status]);
@@ -59,30 +61,15 @@ useEffect(() => {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
+    setChat((prev) => [...prev, {
+        role: "user",
+        content: message
+    }])
     setMessage("")
     setLoading(true);
 
 
-    const JSONdata = JSON.stringify(
-    {
-        "message_history": chat,
-        "email": "melby@gmail.com",
-        "student_question": message,
-        "course_name": "Marketing101"
-    
-    });
-
-    const updateChat = [
-        ...chat,
-        {
-            content: `${message}`,
-            role: "user"
-        }
-    ]
-
-    setChat(updateChat)
-
-    const endpoint = "/api/form";
+    const endpoint = "http://localhost:8000/conversation/0/text";
 
     const options = {
       method: "POST",
@@ -91,15 +78,16 @@ useEffect(() => {
         "Content-Type": "application/json",
       },
 
-      body: JSONdata,
+      body: JSON.stringify({
+        message
+      }),
     };
-    const uri = process.env.NEXT_PUBLIC_API_URL + '/ask_question'
     
-    const response = await fetch(uri, options);
+    const response = await fetch(endpoint, options);
 
     const result = await response.json();
 
-    setChat(result)
+    setChat(result.messages)
     
     console.log(result);
     setLoading(false);

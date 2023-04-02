@@ -1,15 +1,15 @@
 import os
 import uuid
 
-from models import Persona, Conversation, User, TextCompletionBody
-from .scripts import speech2text, parse
+from models import Message, Persona, Conversation, User, TextCompletionBody
+from scripts import speech, parse
 import firebase_admin
 from firebase_admin import credentials, firestore
 import datetime
 from pydub import AudioSegment
 
 
-cred = credentials.Certificate("./api/secret.json")
+cred = credentials.Certificate("./secret.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()  # this connects to our Firestore database
@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 load_dotenv()  # take environment variables from .env.
 
 from fastapi import FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 import openai
 
 
@@ -33,12 +34,25 @@ personas: list[Persona] = [
 for persona in personas:
     persona.prompt = f"{persona.prompt} {prompt_base}"
 
-conversations: list[Conversation] = []
+conversations: list[Conversation] = [
+    Conversation(
+        id=0,
+        user_id=0,
+        messages=[],
+    )
+]
 users: list[User] = [User(id=0, name="Angela Thomas", health_history="", conversations=[], persona=personas[1])]
 
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def read_root():
@@ -60,7 +74,7 @@ async def new_conversation(user_id: int) -> Conversation:
 
 @app.post("/conversation/{conversation_id}/audio")
 async def completion_audio(conversation_id: int, file: UploadFile) -> Conversation:
-    path = "../assets/" + str(uuid.uuid4()) + ""
+    path = "./assets/" + str(uuid.uuid4())
     with open(path, "wb") as buffer:
         content = await file.read()
         buffer.write(content)
@@ -68,17 +82,16 @@ async def completion_audio(conversation_id: int, file: UploadFile) -> Conversati
     audio = AudioSegment.from_file(path)
     new_path = path + ".wav"
     audio.export(
-        path=new_path,
-        format=".wav",
-        bitrate="192k",
-        codec="pcm_mulaw",
+        new_path,
+        format="wav",
+        # codec="pcm_mulaw",
     )
 
     os.remove(path)
-    text = speech2text(new_path)
+    text = speech.speech2text(new_path)
     os.remove(new_path)
 
-    return completion_text(conversation_id, text)
+    return completion_text(conversation_id, str(text))
 
 
 @app.post("/conversation/{conversation_id}/text")
@@ -95,13 +108,14 @@ def completion_text(conversation_id: int, message: str) -> Conversation:
     
     # Sentiment model load in
     model = parse.model_load()
-    sentiment = model(message)
+    sentiment = model(message)[0] # type: ignore
 
     # Query the latest document and retrieve its ID
-    query = collection.order_by('Date', direction=firestore.Query.DESCENDING).limit(1)
-    latest_doc = query[0]
-    latest_doc_id = latest_doc.id
-
+    # query = collection.order_by('Date', direction=firestore.Query.DESCENDING).limit(1)
+    # latest_doc = query[0]
+    # latest_doc_id = latest_doc.id
+    latest_doc_id = str(uuid.uuid4())
+    print(sentiment, kw, message)
     res = collection.document(latest_doc_id).set({
         "Date": datetime.datetime.now(),
         "Keywords": kw,
@@ -109,9 +123,6 @@ def completion_text(conversation_id: int, message: str) -> Conversation:
         "Sentiment": sentiment,
         "Risk": 0
     })
-
-    if conversation_id not in conversations:
-        raise Exception("Conversation not found")
         
     convo = conversations[conversation_id]
     user = users[convo.user_id]
@@ -120,24 +131,31 @@ def completion_text(conversation_id: int, message: str) -> Conversation:
 
     for m in convo.messages:
         msgs.append({
-            "role": m.sender,
-            "content": m.text
+            "role": m.role,
+            "content": m.content
         })
 
+    msgs.append(
+        {
+            "role": "user",
+            "content": message,
+            # "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+    )
     completion = openai.ChatCompletion.create(messages=[
         {
             "role": "system",
-            "content": user.persona.prompt
+            "content": user.persona.prompt,
+            # "timestamp": "0"
         },
         *msgs,
-        {
-            "role": "user",
-            "content": message
-        }
     ], model="gpt-3.5-turbo")
     
     
     msgs.append(completion["choices"][0]["message"]) # type: ignore
-    convo.messages = msgs
+    convo.messages = []
+    for m in msgs:
+        convo.messages.append(Message(role=m["role"], content=m["content"]))
+    print(convo)
 
     return convo

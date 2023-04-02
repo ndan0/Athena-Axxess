@@ -6,7 +6,7 @@ import random
 start_date = datetime.datetime(2023, 1, 1)
 dates = [start_date + datetime.timedelta(days=i) for i in range(51)]
 
-cred = credentials.Certificate("./api/secret.json")
+cred = credentials.Certificate("./secret.json")
 firebase_admin.initialize_app(cred)
 
 db = firestore.client()  # this connects to our Firestore database
