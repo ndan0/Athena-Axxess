@@ -14,27 +14,30 @@ def get_emotion(start_dt, num_of_days):
     # start_ts = start_date.timestamp()
     end_date = start_date + timedelta(days=n_days)
     end_dt = datetime.strftime(end_date, '%Y-%m-%d')
-    print(start_dt)
-    print(end_dt)
+    #print(start_dt)
+    #print(end_dt)
     # Query documents with date field between start_date and end_date
     docs = collection.where('Date', '>=', start_dt).where('Date', '<=', end_dt).get()
 
     result = []
     # Iterate through the documents and extract the desired field
     for doc in docs:
-        print("doc", doc.to_dict())
+        emotions = []
+        #print(type(doc.to_dict()["Date"]))
+        #print(type(doc.to_dict()["Sentiment"]))
+
         obj = {
             "date" : doc.to_dict()["Date"],
-            "emotions" : doc.to_dict()["Sentiment"]
-            
+            "emotions" : doc.to_dict()["Sentiment"],
+            "id": doc.to_dict()["Patient_ID"]
         }
         result.append(obj)
 
-    print(result)   
+    #print(result)   
     return result
 
 def get_keywords(start_dt, num_of_days):
-    print("hi")
+    #rint("hi")
     # Define number of days to add to start date
     n_days = num_of_days
 
@@ -43,19 +46,19 @@ def get_keywords(start_dt, num_of_days):
     # start_ts = start_date.timestamp()
     end_date = start_date + timedelta(days=n_days)
     end_dt = datetime.strftime(end_date, '%Y-%m-%d')
-    print(start_dt)
-    print(end_dt)
+    #print(start_dt)
+    #print(end_dt)
     # Query documents with date field between start_date and end_date
     docs = collection.where('Date', '>=', start_dt).where('Date', '<=', end_dt).get()
 
     result = []
     # Iterate through the documents and extract the desired field
     for doc in docs:
-        print("doc", doc.to_dict())
+        #print("doc", doc.to_dict())
         obj = {
             "date" : doc.to_dict()["Date"],
-            "keywords" : doc.to_dict()["Keywords"]
-            
+            "keywords" : doc.to_dict()["Keywords"],
+            "id": doc.to_dict()["Patient_ID"]
         }
         result.append(obj)
 

@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 import azure.cognitiveservices.speech as speechsdk
 import os
 import uuid
@@ -17,9 +20,6 @@ from pydub import AudioSegment
 db = firestore.client()  # this connects to our Firestore database
 collection = db.collection('query-db')  # opens 'query-db' collection
 
-from dotenv import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
 
 from fastapi import FastAPI, UploadFile, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
@@ -159,9 +159,9 @@ def completion_from_text(conversation_id: int, message: str) -> Conversation:
     res = collection.document(latest_doc_id).set({
         "Date": datetime.datetime.now(),
         "Keywords": kw,
+        "Patient_ID":4,
         "Query": message,
         "Sentiment": sentiment,
-        "Risk": 0
     })
         
     convo = conversations[conversation_id]
@@ -201,7 +201,7 @@ def completion_from_text(conversation_id: int, message: str) -> Conversation:
 
 
 
-def tts(text: str, voice: str = "en-US-DavisNeural"):
+def tts(text: str, voice: str = "en-US-CoraNeural"):
     # Creates an instance of a speech config with specified subscription key and service region.
     speech_key = os.environ["AZURE_SPEECH_KEY"]
     service_region = os.environ["AZURE_SPEECH_REGION"]

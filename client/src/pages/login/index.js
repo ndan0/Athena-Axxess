@@ -48,7 +48,7 @@ export default function Login() {
                 </div>
                 <div>
                 <label for="password"><b>Password:  </b></label>
-                <input type={password} placeholder="Enter Password" name="password" required onChange={(e) => setPassword(e.target.value)} />
+                <input type={"password"} placeholder="Enter Password" name="password" required onChange={(e) => setPassword(e.target.value)} />
                 </div>
 
                 <button className="my-2 mt-5 px-5 py-1 bg-axx-red text-white rounded-md" type="submit" onClick={handleSubmit}>Login</button>

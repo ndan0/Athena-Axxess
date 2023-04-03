@@ -13,6 +13,7 @@ client = fitbit.Fitbit(
 )
 
 def get_heart_rate(start_date, num_of_day):
+    print("heart!")
     # Set the start date and end date for the heart rate data
     start = datetime.datetime.strptime(start_date, '%Y-%m-%d')
 

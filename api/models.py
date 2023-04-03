@@ -64,7 +64,9 @@ class Calories(BaseModel):
 class Keywords(BaseModel):
     date: str
     keywords: str
+    id: int
 
 class Emotions(BaseModel):
     date: str
-    emotions: list[str]
+    emotions: list[dict]
+    id: int

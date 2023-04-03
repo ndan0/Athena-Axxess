@@ -149,27 +149,27 @@ function Example() {
     useEffect(() => {
         const heartAction = async () => {
 
-            const rawData = [
-                {
-                    date: "2021-01-01",
-                    avg_hrt: 70
-                },
-                {
-                    date: "2021-01-02",
-                    avg_hrt: 70
-                },
-                {
-                    date: "2021-01-03",
-                    avg_hrt: 70
-                },{
-                    date: "2021-01-04",
-                    avg_hrt: 70
-                },
+            // const rawData = [
+            //     {
+            //         date: "2021-01-01",
+            //         avg_hrt: 70
+            //     },
+            //     {
+            //         date: "2021-01-02",
+            //         avg_hrt: 70
+            //     },
+            //     {
+            //         date: "2021-01-03",
+            //         avg_hrt: 70
+            //     },{
+            //         date: "2021-01-04",
+            //         avg_hrt: 70
+            //     },
 
-            ]
+            // ]
 
-            // const res = await fetch("https://6a44-129-110-241-55.ngrok.io/dashboard/heart/" + date+ "/" + days)
-            // const rawData = await res.json()
+            const res = await fetch("https://6a44-129-110-241-55.ngrok.io/dashboard/heart/" + date+ "/" + days)
+            const rawData = await res.json()
 
             let dateArr = []
             let heartArr = []
