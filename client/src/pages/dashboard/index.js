@@ -165,9 +165,15 @@ function Example() {
             //         date: "2021-01-04",
             //         avg_hrt: 70
             //     },
+<<<<<<< Updated upstream
 
             // ]
 
+=======
+            //
+            // ]
+
+>>>>>>> Stashed changes
             const res = await fetch("https://6a44-129-110-241-55.ngrok.io/dashboard/heart/" + date+ "/" + days)
             const rawData = await res.json()
 

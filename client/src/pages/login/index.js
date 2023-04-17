@@ -47,8 +47,13 @@ export default function Login() {
                 <input type={user} placeholder="Enter Username" name="user" required onChange={(e) => setUser(e.target.value)} />
                 </div>
                 <div>
+<<<<<<< Updated upstream
                 <label for="password"><b>Password:  </b></label>
                 <input type={"password"} placeholder="Enter Password" name="password" required onChange={(e) => setPassword(e.target.value)} />
+=======
+                <label for="password" ><b>Password:  </b></label>
+                <input type="password" placeholder="Enter Password" name="password" required onChange={(e) => setPassword(e.target.value)} />
+>>>>>>> Stashed changes
                 </div>
 
                 <button className="my-2 mt-5 px-5 py-1 bg-axx-red text-white rounded-md" type="submit" onClick={handleSubmit}>Login</button>
